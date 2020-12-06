@@ -28,11 +28,17 @@ function Navbar(props) {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
+            <NavLink to="/Login" className="nav-item nav-link">
+              Login <span className="sr-only">(current)</span>
+            </NavLink>
             <NavLink to="/" className="nav-item nav-link">
               Home <span className="sr-only">(current)</span>
             </NavLink>
             <NavLink to="/Dashboard" className="nav-item nav-link">
               Dashboard
+            </NavLink>
+            <NavLink to="/TradingView" className="nav-item nav-link">
+              TradingView
             </NavLink>
             <NavLink to="/MarketCap" className="nav-item nav-link">
               MarketCap
