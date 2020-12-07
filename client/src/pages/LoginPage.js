@@ -1,28 +1,107 @@
-import React, { Component } from "react";
+import firebase from "firebase";
 import withFirebaseAuth from "react-with-firebase-auth";
-import firebase from "firebase/app";
-import "firebase/auth";
 import firebaseConfig from "../firebaseConfig";
+import UserForm from "../components/Login/UserForm";
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-class LoginPage extends Component {
-  render() {
-    const { user, signOut, signInWithGoogle } = this.props;
+const FormWrapper = ({ children }) => (
+  <>
+    <div style={{ marginLeft: "1.34em" }}>{children}</div>
+    <hr />
+  </>
+);
 
-    return (
-      <div className="Login">
-        {user ? <p>Hello, {user.displayName}</p> : <p>Please sign in.</p>}
+const Loading = () => (
+  <div
+    style={{
+      position: "fixed",
+      display: "flex",
+      top: 0,
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100%",
+      height: "2.68em",
+      background: "green",
+      color: "white",
+    }}
+  >
+    Loading..
+  </div>
+);
 
-        {user ? (
-          <button onClick={signOut}>Sign out</button>
-        ) : (
-          <button onClick={signInWithGoogle}>Sign in with Google</button>
-        )}
-      </div>
-    );
-  }
-}
+const LoginPage = ({
+  user,
+  error,
+  loading,
+  setError,
+  signOut,
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  signInWithGoogle,
+  signInWithGithub,
+  createUserWithEmailAndPassword,
+}) => (
+  <>
+    {loading && <Loading />}
+
+    <FormWrapper>
+      <h1>react-with-firebase-auth</h1>
+      <h3>a very simple demo showing it in action</h3>
+      <h3>see user data and errors in the end of this page</h3>
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>create user</h1>
+      <UserForm onSubmit={createUserWithEmailAndPassword} />
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>sign in</h1>
+      <UserForm onSubmit={signInWithEmailAndPassword} />
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>sign in with google</h1>
+      <button onClick={signInWithGoogle}>sign in with google</button>
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>sign in with github</h1>
+      <h3>(no provider setup, good to see error message)</h3>
+      <button onClick={signInWithGithub}>sign in with github</button>
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>sign in anonymously</h1>
+      <h3>(failing due to permissions, good to see error message)</h3>
+      <button onClick={signInAnonymously}>sign in anonymously</button>
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>sign out</h1>
+      <button onClick={signOut}>sign out</button>
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>clear error</h1>
+      <button onClick={() => setError(null)}>clear error</button>
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>user data</h1>
+      <textarea
+        style={{ width: 350, height: 200 }}
+        value={JSON.stringify(user, null, 2)}
+      />
+    </FormWrapper>
+
+    <FormWrapper>
+      <h1>error data</h1>
+      <textarea style={{ width: 350, height: 200 }} value={error} />
+    </FormWrapper>
+  </>
+);
 
 const firebaseAppAuth = firebaseApp.auth();
 
